@@ -80,7 +80,7 @@ char* intal2str(void *intal)
     i++;
     j--;
   }
-  K = (char*)calloc(len+1-j,sizeof(char));
+  K = (char*)calloc(len+1-j, sizeof(char));
   for(i=0; i<len-j; i++)
   {
     K[i]=X[i+j];
@@ -578,4 +578,53 @@ void *intal_multiply(void *intal1, void *intal2)
   free(str1);
   free(str2);
   return Intal;
+}
+
+void* intal_pow(void* intal1, void* intal2)
+{
+  void *Z= intal_create("0");
+  if(intal1==NULL || intal2==NULL)
+	return Z;
+
+  if(intal_compare(intal1, Z)==0)
+  {
+	return Z;
+  }
+
+  if(intal_compare(intal2, Z)==0)
+  {
+    free(Z);
+    return intal_create("1");
+  }
+  free(Z);
+  void *One = intal_create("1");
+  if(intal_compare(intal2, One)==0)
+  {
+    free(One);
+    return intal1;
+  }
+  
+  void *nextNo = intal_create("1");
+  void *Res = intal_create("1");
+
+  void *T1, *T2;
+
+  while (1)
+  {
+  	T1 = Res;
+  	T2 = nextNo;
+  	nextNo = intal_add(nextNo, One);
+  	Res = intal_multiply(Res, intal1);
+  	if(intal_compare(nextNo, intal2)==0)
+  	{
+  		free(One);
+  		free(nextNo);
+  		free(T1);
+  		free(T2);
+  		return Res;
+  	}
+  	free(T1);
+  	free(T2);
+  }
+  
 }
